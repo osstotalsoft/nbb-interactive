@@ -1,6 +1,6 @@
-#r "nuget: NBB.Messaging.Nats, 6.0.19"
-#r "nuget: NBB.Messaging.Rusi, 6.0.19"
-#r "nuget: NBB.Messaging.Host, 6.0.19"
+#r "nuget: NBB.Messaging.Nats, 6.0.22"
+#r "nuget: NBB.Messaging.Rusi, 6.0.22"
+#r "nuget: NBB.Messaging.Host, 6.0.22"
 #r "nuget: Microsoft.Extensions.DependencyInjection, 6.0.0"
 #r "nuget: Microsoft.Extensions.Hosting, 6.0.1"
 #r "nuget: Microsoft.Extensions.Configuration, 6.0.0"
@@ -14,6 +14,9 @@
 
 open Microsoft.Extensions.DependencyInjection
 open Microsoft.Extensions.Hosting
+open Microsoft.Extensions.Logging
+open Microsoft.Extensions.Options
+open Microsoft.Extensions.Configuration
 open NBB.Messaging.Host
 open Moq
 open System
@@ -30,7 +33,7 @@ let buildContainer () =
                 h.Configure (fun configBuilder ->
                     configBuilder
                         .AddSubscriberServices(fun c ->
-                            for i in 1..100 do
+                            for i in 1..1000 do
                                 c.FromTopic(sprintf "MyCommand_%i" i) |> ignore)
                         .WithDefaultOptions()
                         .UsePipeline(fun pipelineBuilder ->
