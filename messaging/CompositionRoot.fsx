@@ -37,7 +37,8 @@ let buildContainer servicesAction =
 
     services
         .AddMessageBus()
-        .AddRusiTransport(configuration)
+        //.AddRusiTransport(configuration)
+        .AddNatsTransport(configuration)
     |> ignore
 
     servicesAction services configuration

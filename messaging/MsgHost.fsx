@@ -33,7 +33,7 @@ let buildContainer () =
                 h.Configure (fun configBuilder ->
                     configBuilder
                         .AddSubscriberServices(fun c ->
-                            for i in 1..1000 do
+                            for i in 1..1 do
                                 c.FromTopic(sprintf "MyCommand_%i" i) |> ignore)
                         .WithDefaultOptions()
                         .UsePipeline(fun pipelineBuilder ->
