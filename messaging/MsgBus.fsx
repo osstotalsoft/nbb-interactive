@@ -15,17 +15,18 @@ open System.Threading.Tasks
 
 
 let bigString =
-    [ 1..50000 ]
-    |> List.map (fun i -> i.ToString())
-    |> String.concat "-"
+    [ 1..50000 ] |> List.map (fun i -> i.ToString()) |> String.concat "-"
 
 let c = CompositionRoot.buildContainer (fun _ _ -> ())
 
 let pubAsync msg topic tenantId cnt =
     let msgBus = c.GetRequiredService<IMessageBusPublisher>()
-    let o = MessagingPublisherOptions.Default
-    o.TopicName <- topic
-    o.EnvelopeCustomizer <- fun envelope -> envelope.SetHeader("nbb-tenantId", tenantId)
+
+    let o =
+        new MessagingPublisherOptions(
+            TopicName = topic,
+            EnvelopeCustomizer = fun envelope -> envelope.SetHeader("nbb-tenantId", tenantId)
+        )
 
     task {
         for _ in 1..cnt do
@@ -35,15 +36,14 @@ let pubAsync msg topic tenantId cnt =
 let pub topic cnt =
     pubAsync {| id = bigString |} topic "" cnt |> ignore
 
-let pubT topic msg tenantId = 
-    pubAsync msg topic tenantId 1 |> ignore
+let pubT topic msg tenantId = pubAsync msg topic tenantId 1 |> ignore
 
 
 let subAsync (h: MessagingEnvelope -> Task<unit>) topic =
     let msgBus = c.GetRequiredService<IMessageBusSubscriber>()
-    let o = MessagingSubscriberOptions.Default
-    o.TopicName <- topic
-    o.Transport <- SubscriptionTransportOptions.RequestReply
+
+    let o =
+        new MessagingSubscriberOptions(TopicName = topic, Transport = SubscriptionTransportOptions.RequestReply)
 
     task {
         let h1 e = h (e) :> Task
@@ -62,6 +62,4 @@ let infiniteSub topic =
     t.Result
 
 let subMany cnt =
-    [ 1..cnt ]
-    |> List.map (sprintf "topic_%i")
-    |> List.map sub
+    [ 1..cnt ] |> List.map (sprintf "topic_%i") |> List.map sub
