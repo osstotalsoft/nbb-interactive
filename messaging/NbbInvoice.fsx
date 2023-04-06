@@ -13,4 +13,4 @@ open System
 
 let processInvoiceTopic = "NBB.Invoices.PublishedLanguage.ProcessInvoice"
 
-let processInvoice cnt = MsgBus.pubAsync {| InvoiceId = "0FB78DEC-B01E-492F-B659-A749F7AF4F35" |} processInvoiceTopic "" 10
+let processInvoice cnt = MsgBus.pub {| InvoiceId = "0FB78DEC-B01E-492F-B659-A749F7AF4F35" |} processInvoiceTopic ""

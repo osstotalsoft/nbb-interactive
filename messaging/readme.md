@@ -9,16 +9,17 @@ Open in fsharp interactive
 cd .\messaging\
 dotnet fsi
 #load "MsgBus.fsx";;
+open MsgBus;;
 ```
 Examples:
 
-- publish 10 messages to topic `MyTopic`
+- publish message to topic `MyTopic`
     ```fsharp
-    MsgBus.pub "MyTopic" 10;;
+    pub {| id = 1 |} "MyTopic" "tenantId" |> wait;;
     ```
 - subscribe to topic `MyTopic`
     ```fsharp
-    let s = MsgBus.sub "MyTopic";;
+    let s = sub doNothing "MyTopic" |> wait;;
     ```
 
 ## Messaging Host
