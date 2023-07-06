@@ -49,5 +49,3 @@ let infiniteSub msg topic tenantId =
 let wait (t: Task<'a>) = t.GetAwaiter().GetResult()
 
 let doNothing _ = Task.FromResult()
-
-
